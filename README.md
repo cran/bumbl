@@ -13,6 +13,8 @@ coverage](https://codecov.io/gh/Aariq/bumbl/branch/master/graph/badge.svg)](http
 stable](https://img.shields.io/badge/lifecycle-stable-brightgreen.svg)](https://lifecycle.r-lib.org/articles/stages.html#stable)
 [![CRAN
 status](https://www.r-pkg.org/badges/version/bumbl)](https://CRAN.R-project.org/package=bumbl)
+[![metacran
+downloads](https://cranlogs.r-pkg.org/badges/grand-total/bumbl)](https://cran.r-project.org/package=bumbl)
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.4545782.svg)](https://doi.org/10.5281/zenodo.4545782)
 
 <!-- badges: end -->
@@ -30,7 +32,7 @@ colonies. Stay tuned for future developments that may allow estimating a
 single value of a covariate but different values of growth and decline
 rates and *tau* for each colony.
 
-## Collaboration
+## Contributing
 
 I’m looking for collaborators who know (or are willing to let me teach
 them) how to use git and GitHub and who have an interest in helping to
@@ -53,23 +55,33 @@ bumblebee ecology and demography from anyone!
     `bumbl()`
 -   [x] Release v0.1.0 and archive on Zenodo
 -   [x] Bug fixes
--   [ ] Submit v1.0.0 of package to CRAN
+-   [x] Submit v1.0.0 of package to CRAN
+-   [x] Write a manuscript for JOSS
+    ([desk-reject](https://github.com/openjournals/joss-reviews/issues/3532),
+    out of scope)
+-   [ ] Release minor version to CRAN to update citation
 -   [ ] Possibly re-work internals of `bumbl()`? (see
-    [\#58](https://github.com/Aariq/bumbl/issues/58))
--   [ ] Polish user interface in regards to specifying formula and
-    covariates.
+    [\#58](https://github.com/Aariq/bumbl/issues/58) and
+    [notes](https://github.com/Aariq/bumbl/blob/master/notes/single-model-rework-notes.Rmd))
 -   [ ] Submit v2.0.0 of package to CRAN
--   [ ] Write a manuscript for JOSS or other journal
 
 Other possible areas of improvement:
 
 -   Extend `bumbl()` to work with GLMMs
 -   Test significance of switchpoint (see
     [\#62](https://github.com/Aariq/bumbl/issues/62))
+-   Extend `bumbl()` to work with dates, datetimes, or other timeseries
+    classes (see [\#46](https://github.com/Aariq/bumbl/issues/46))
 
 ## Installation
 
-You can install this development version of `bumbl` with:
+You can install `bumbl` with:
+
+``` r
+install.packages("bumbl")
+```
+
+Or install the development version with:
 
 ``` r
 devtools::install_github("Aariq/bumbl", build_vignettes = TRUE)
@@ -88,7 +100,7 @@ View the `bomubs` dataset
 
 ``` r
 head(bombus)
-#> # A tibble: 6 x 10
+#> # A tibble: 6 × 10
 #>   site  colony  wild habitat date        week  mass d.mass floral_resources
 #>   <fct> <fct>  <dbl> <fct>   <date>     <int> <dbl>  <dbl>            <dbl>
 #> 1 PUT2  9       0.98 W       2003-04-03     0 1910.    0.1            27.8 
@@ -109,7 +121,7 @@ colonies switch to reproduction
 bombus2 <- bombus[bombus$colony %in% c(9, 82, 98, 35), ]
 results <- bumbl(bombus2, colonyID = colony, t = week, formula = d.mass ~ week)
 results
-#> # A tibble: 4 x 7
+#> # A tibble: 4 × 7
 #>   colony converged   tau logN0 logLam  decay logNmax
 #>   <chr>  <lgl>     <dbl> <dbl>  <dbl>  <dbl>   <dbl>
 #> 1 35     TRUE       9.37  3.65  0.214 -0.296    5.60

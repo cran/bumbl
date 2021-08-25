@@ -1,3 +1,7 @@
+# bumbl 1.0.1
+
+-   Updated package citation and author list
+
 # bumbl 1.0.0
 
 -   First "stable" release

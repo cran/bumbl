@@ -26,7 +26,14 @@
     </style>
 
 
-<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css">
+  code {
+    white-space: pre;
+  }
+  .sourceCode {
+    overflow: visible;
+  }
+</style>
 <style type="text/css" data-origin="pandoc">
 pre > code.sourceCode { white-space: pre; position: relative; }
 pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
@@ -162,7 +169,7 @@ div.csl-indent {
 <div id="introduction-to-the-bumbl-function" class="section level2">
 <h2>Introduction to the bumbl() function</h2>
 <p>Bumblebee colony growth is characterized by an initial exponential growth period when workers are being produced, followed by a switch to production of reproductive individuals (gynes and drones). Reproductive individuals leave the nest, resulting in a decline in colony size. The initial growth rate, the rate or decline, and the time to switching to reproduction may vary in response to environmental conditions <span class="citation">(Crone and Williams 2016)</span>.</p>
-<p>The <code>bumbl()</code> function fits a model, described below and in Crone &amp; Williams <span class="citation">(2016)</span>, that finds a growth rate (<span class="math inline">\(\lambda\)</span>), a decline rate (<span class="math inline">\(\delta\)</span>) , and a switchpoint (<span class="math inline">\(\tau\)</span>. When supplied with a dataset with multiple colonies, a model is fit separately for each colony and these three parameters (as well as an estimated starting colony size and maximum colony size) are returned. In this example, we’ll use the built-in <code>bombus</code> dataset. For more information on this dataset see the help file with <code>?bombus</code>.</p>
+<p>The <code>bumbl()</code> function fits a model, described below and in Crone &amp; Williams <span class="citation">(2016)</span>, that finds a growth rate (<span class="math inline">\(\lambda\)</span>), a decline rate (<span class="math inline">\(\delta\)</span>) , and a switchpoint (<span class="math inline">\(\tau\)</span>). When supplied with a dataset with multiple colonies, a model is fit separately for each colony and these three parameters (as well as an estimated starting colony size and maximum colony size) are returned. In this example, we’ll use the built-in <code>bombus</code> dataset. For more information on this dataset see the help file with <code>?bombus</code>.</p>
 <p>Before the switch point, growth (colony weight, <span class="math inline">\(W_t\)</span>) is defined as:</p>
 <p><span class="math display">\[
 W_t = \lambda^tW_0
@@ -179,7 +186,7 @@ W_t =
   \end{cases}
 \]</span></p>
 <p>After log-linearizing this model, it it looks like this:</p>
-<p>For <span class="math inline">\(t&lt;=\tau\)</span>:</p>
+<p>For <span class="math inline">\(t \leq \tau\)</span>:</p>
 <p><span class="math display">\[
 \ln(W_t) = \ln(W_0) + t\ln(\lambda)
 \]</span></p>
@@ -201,7 +208,7 @@ ln(W_t) = \beta_0 + \beta_1t + \beta_2 \textrm{ .post}
 <div id="modeling-bombus-colony-growth" class="section level2">
 <h2>Modeling Bombus colony growth</h2>
 <div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(bombus)</span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; # A tibble: 6 x 10</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; # A tibble: 6 × 10</span></span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   site  colony  wild habitat date        week  mass d.mass floral_resources</span></span>
 <span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   &lt;fct&gt; &lt;fct&gt;  &lt;dbl&gt; &lt;fct&gt;   &lt;date&gt;     &lt;int&gt; &lt;dbl&gt;  &lt;dbl&gt;            &lt;dbl&gt;</span></span>
 <span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 1 PUT2  9       0.98 W       2003-04-03     0 1910.    0.1            27.8 </span></span>
@@ -216,7 +223,7 @@ ln(W_t) = \beta_0 + \beta_1t + \beta_2 \textrm{ .post}
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Warning: Search for optimal switchpoint did not converge for colonyID &#39;32&#39;. Omitting from results.</span></span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Warning: Search for optimal switchpoint did not converge for colonyID &#39;71&#39;. Omitting from results.</span></span>
 <span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(out)</span>
-<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; # A tibble: 6 x 7</span></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; # A tibble: 6 × 7</span></span>
 <span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   colony converged   tau logN0 logLam  decay logNmax</span></span>
 <span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   &lt;chr&gt;  &lt;lgl&gt;     &lt;dbl&gt; &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;   &lt;dbl&gt;</span></span>
 <span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 1 104    TRUE       6.42  3.44  0.380 -0.541    5.78</span></span>
@@ -233,7 +240,7 @@ ln(W_t) = \beta_0 + \beta_1t + \beta_2 \textrm{ .post}
 <span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Warning: Search for optimal switchpoint did not converge for colonyID &#39;67&#39;. Omitting from results.</span></span>
 <span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Warning: Search for optimal switchpoint did not converge for colonyID &#39;86&#39;. Omitting from results.</span></span>
 <span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(out2)</span>
-<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; # A tibble: 6 x 8</span></span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; # A tibble: 6 × 8</span></span>
 <span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   colony converged   tau logN0 logLam  decay logNmax beta_cum_floral</span></span>
 <span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   &lt;chr&gt;  &lt;lgl&gt;     &lt;dbl&gt; &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;   &lt;dbl&gt;           &lt;dbl&gt;</span></span>
 <span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 1 104    TRUE       5.56  3.12  0.361 -0.633    5.73         0.0142 </span></span>
@@ -263,7 +270,7 @@ ln(W_t) = \beta_0 + \beta_1t + \beta_2 \textrm{ .post}
 <span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Warning: Search for optimal switchpoint did not converge for colonyID &#39;32&#39;. Omitting from results.</span></span>
 <span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Warning: Search for optimal switchpoint did not converge for colonyID &#39;71&#39;. Omitting from results.</span></span>
 <span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(out3)</span>
-<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; # A tibble: 6 x 8</span></span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; # A tibble: 6 × 8</span></span>
 <span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   colony model  converged   tau logN0 logLam  decay logNmax</span></span>
 <span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   &lt;chr&gt;  &lt;list&gt; &lt;lgl&gt;     &lt;dbl&gt; &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;   &lt;dbl&gt;</span></span>
 <span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 1 104    &lt;glm&gt;  TRUE       6.42  3.44  0.380 -0.541    5.78</span></span>
@@ -292,29 +299,23 @@ ln(W_t) = \beta_0 + \beta_1t + \beta_2 \textrm{ .post}
 <span id="cb9-17"><a href="#cb9-17" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
 <span id="cb9-18"><a href="#cb9-18" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;     some</span></span>
 <span id="cb9-19"><a href="#cb9-19" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(rsq)</span>
-<span id="cb9-20"><a href="#cb9-20" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Registered S3 methods overwritten by &#39;lme4&#39;:</span></span>
-<span id="cb9-21"><a href="#cb9-21" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   method                          from</span></span>
-<span id="cb9-22"><a href="#cb9-22" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   cooks.distance.influence.merMod car </span></span>
-<span id="cb9-23"><a href="#cb9-23" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   influence.merMod                car </span></span>
-<span id="cb9-24"><a href="#cb9-24" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   dfbeta.influence.merMod         car </span></span>
-<span id="cb9-25"><a href="#cb9-25" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   dfbetas.influence.merMod        car</span></span>
-<span id="cb9-26"><a href="#cb9-26" aria-hidden="true" tabindex="-1"></a><span class="co">#for a single colony</span></span>
-<span id="cb9-27"><a href="#cb9-27" aria-hidden="true" tabindex="-1"></a><span class="co"># m &lt;- out3$model[[1]]</span></span>
-<span id="cb9-28"><a href="#cb9-28" aria-hidden="true" tabindex="-1"></a><span class="co"># rsq(m)</span></span>
-<span id="cb9-29"><a href="#cb9-29" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-30"><a href="#cb9-30" aria-hidden="true" tabindex="-1"></a><span class="co">#for all colonies</span></span>
-<span id="cb9-31"><a href="#cb9-31" aria-hidden="true" tabindex="-1"></a>out3<span class="fl">.1</span> <span class="ot">&lt;-</span></span>
-<span id="cb9-32"><a href="#cb9-32" aria-hidden="true" tabindex="-1"></a>  out3 <span class="sc">%&gt;%</span> </span>
-<span id="cb9-33"><a href="#cb9-33" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">r2 =</span> purrr<span class="sc">::</span><span class="fu">map_dbl</span>(model, rsq), <span class="at">.after =</span> model)</span>
-<span id="cb9-34"><a href="#cb9-34" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-35"><a href="#cb9-35" aria-hidden="true" tabindex="-1"></a>out3<span class="fl">.1</span> <span class="sc">%&gt;%</span> <span class="fu">filter</span>(colony <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">&quot;104&quot;</span>, <span class="st">&quot;17&quot;</span>, <span class="st">&quot;20&quot;</span>, <span class="st">&quot;24&quot;</span>))</span>
-<span id="cb9-36"><a href="#cb9-36" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; # A tibble: 4 x 9</span></span>
-<span id="cb9-37"><a href="#cb9-37" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   colony model     r2 converged   tau logN0 logLam  decay logNmax</span></span>
-<span id="cb9-38"><a href="#cb9-38" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   &lt;chr&gt;  &lt;list&gt; &lt;dbl&gt; &lt;lgl&gt;     &lt;dbl&gt; &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;   &lt;dbl&gt;</span></span>
-<span id="cb9-39"><a href="#cb9-39" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 1 104    &lt;glm&gt;  0.977 TRUE       6.42  3.44  0.380 -0.541    5.78</span></span>
-<span id="cb9-40"><a href="#cb9-40" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 2 17     &lt;glm&gt;  0.956 TRUE       6.36  3.39  0.407 -0.662    5.83</span></span>
-<span id="cb9-41"><a href="#cb9-41" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 3 20     &lt;glm&gt;  0.473 TRUE       7.27  2.79  0.194 -0.345    4.14</span></span>
-<span id="cb9-42"><a href="#cb9-42" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 4 24     &lt;glm&gt;  0.729 TRUE       6.23  4.06  0.167 -0.391    5.06</span></span></code></pre></div>
+<span id="cb9-20"><a href="#cb9-20" aria-hidden="true" tabindex="-1"></a><span class="co">#for a single colony</span></span>
+<span id="cb9-21"><a href="#cb9-21" aria-hidden="true" tabindex="-1"></a><span class="co"># m &lt;- out3$model[[1]]</span></span>
+<span id="cb9-22"><a href="#cb9-22" aria-hidden="true" tabindex="-1"></a><span class="co"># rsq(m)</span></span>
+<span id="cb9-23"><a href="#cb9-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-24"><a href="#cb9-24" aria-hidden="true" tabindex="-1"></a><span class="co">#for all colonies</span></span>
+<span id="cb9-25"><a href="#cb9-25" aria-hidden="true" tabindex="-1"></a>out3<span class="fl">.1</span> <span class="ot">&lt;-</span></span>
+<span id="cb9-26"><a href="#cb9-26" aria-hidden="true" tabindex="-1"></a>  out3 <span class="sc">%&gt;%</span> </span>
+<span id="cb9-27"><a href="#cb9-27" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">r2 =</span> purrr<span class="sc">::</span><span class="fu">map_dbl</span>(model, rsq), <span class="at">.after =</span> model)</span>
+<span id="cb9-28"><a href="#cb9-28" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-29"><a href="#cb9-29" aria-hidden="true" tabindex="-1"></a>out3<span class="fl">.1</span> <span class="sc">%&gt;%</span> <span class="fu">filter</span>(colony <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">&quot;104&quot;</span>, <span class="st">&quot;17&quot;</span>, <span class="st">&quot;20&quot;</span>, <span class="st">&quot;24&quot;</span>))</span>
+<span id="cb9-30"><a href="#cb9-30" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; # A tibble: 4 × 9</span></span>
+<span id="cb9-31"><a href="#cb9-31" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   colony model     r2 converged   tau logN0 logLam  decay logNmax</span></span>
+<span id="cb9-32"><a href="#cb9-32" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   &lt;chr&gt;  &lt;list&gt; &lt;dbl&gt; &lt;lgl&gt;     &lt;dbl&gt; &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;   &lt;dbl&gt;</span></span>
+<span id="cb9-33"><a href="#cb9-33" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 1 104    &lt;glm&gt;  0.977 TRUE       6.42  3.44  0.380 -0.541    5.78</span></span>
+<span id="cb9-34"><a href="#cb9-34" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 2 17     &lt;glm&gt;  0.956 TRUE       6.36  3.39  0.407 -0.662    5.83</span></span>
+<span id="cb9-35"><a href="#cb9-35" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 3 20     &lt;glm&gt;  0.473 TRUE       7.27  2.79  0.194 -0.345    4.14</span></span>
+<span id="cb9-36"><a href="#cb9-36" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 4 24     &lt;glm&gt;  0.729 TRUE       6.23  4.06  0.167 -0.391    5.06</span></span></code></pre></div>
 <p>We can see that colony 20 has a much lower R<sup>2</sup> value than colonies 104, 17, and 24 which matches our expectations from plotting the observed and fitted values.</p>
 <p>See <code>vignette(&quot;nest&quot;, package = &quot;tidyr&quot;)</code> for more about working with list-columns containing models.</p>
 </div>
