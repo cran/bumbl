@@ -7,8 +7,7 @@
 
 [![R build
 status](https://github.com/Aariq/bumbl/workflows/R-CMD-check/badge.svg)](https://github.com/Aariq/bumbl/actions)
-[![Codecov test
-coverage](https://codecov.io/gh/Aariq/bumbl/branch/master/graph/badge.svg)](https://codecov.io/gh/Aariq/bumbl?branch=master)
+[![codecov](https://codecov.io/gh/Aariq/bumbl/branch/master/graph/badge.svg?token=SU9rm3O2cc)](https://app.codecov.io/gh/Aariq/bumbl)
 [![Lifecycle:
 stable](https://img.shields.io/badge/lifecycle-stable-brightgreen.svg)](https://lifecycle.r-lib.org/articles/stages.html#stable)
 [![CRAN
@@ -59,7 +58,7 @@ bumblebee ecology and demography from anyone!
 -   [x] Write a manuscript for JOSS
     ([desk-reject](https://github.com/openjournals/joss-reviews/issues/3532),
     out of scope)
--   [ ] Release minor version to CRAN to update citation
+-   [x] Release minor version to CRAN to update citation
 -   [ ] Possibly re-work internals of `bumbl()`? (see
     [\#58](https://github.com/Aariq/bumbl/issues/58) and
     [notes](https://github.com/Aariq/bumbl/blob/master/notes/single-model-rework-notes.Rmd))
@@ -153,7 +152,7 @@ for colony growth and queen production. Ecol. Lett. 19, 460–468.
 
 ------------------------------------------------------------------------
 
-Please note that the bumbl project is released with a [Contributor Code
-of
+Please note that the `bumbl` project is released with a [Contributor
+Code of
 Conduct](https://github.com/Aariq/bumbl/blob/master/CODE_OF_CONDUCT.md).
 By contributing to this project you agree to abide by its terms.
