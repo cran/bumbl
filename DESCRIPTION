@@ -1,6 +1,6 @@
 Package: bumbl
 Title: Tools for Modeling Bumblebee Colony Growth and Decline
-Version: 1.0.2
+Version: 1.0.3
 Authors@R: c(
     person(given = c("Eric", "R."),
            family = "Scott",
@@ -17,13 +17,13 @@ BugReports: https://github.com/Aariq/bumbl/issues
 Depends: R (>= 3.0)
 Suggests: testthat (>= 2.1.0), knitr, rmarkdown, covr, car, rsq
 Imports: dplyr, rlang, tidyr (>= 1.0.0), purrr, broom, glue, MASS,
-        ggplot2
-RoxygenNote: 7.1.2
+        ggplot2, lifecycle
+RoxygenNote: 7.2.3
 VignetteBuilder: knitr
 Config/testthat/edition: 3
 NeedsCompilation: no
-Packaged: 2022-05-13 15:01:14 UTC; scottericr
+Packaged: 2023-03-08 19:18:13 UTC; ericscott
 Author: Eric R. Scott [aut, cre] (<https://orcid.org/0000-0002-7430-7879>)
 Maintainer: Eric R. Scott <scottericr@gmail.com>
 Repository: CRAN
-Date/Publication: 2022-05-13 20:20:20 UTC
+Date/Publication: 2023-03-08 19:40:09 UTC
