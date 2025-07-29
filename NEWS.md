@@ -1,3 +1,8 @@
+# bumbl 1.0.4
+
+- bumbl is now licenced under an MIT license
+- fixed link in documentation for `brkpt()`
+
 # bumbl 1.0.3
 
 -   In `autoplot.bumbldf()` the first argument has been re-named from `x` to `object` for consistency with other `autoplot()` methods.
